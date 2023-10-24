@@ -1,1 +1,2 @@
-export const CLIENT_ID = "51968882bd9041d996bab0c01aac2d13";
+export const CLIENT_ID = import.meta.env.VITE_CLIENT_ID;
+export const BACKEND_SERVER_TOKEN = import.meta.env.VITE_BACKEND_ACCESS_TOKEN 
