@@ -4,38 +4,7 @@ import { CLIENT_ID } from "../utils/Constants";
 
 export const AuthContext = createContext(null);
 
-function getAccessToken(code) {
 
-    const [accessToken, setAccessToken] = useState();
-    const [refreshToken, setRefreshToken] = useState();
-    const [expiresIn, setExpresIn] = useState();
-
-    useEffect(() => {
-        
-        let codeVerifier = localStorage.getItem('code_verifier');
-        fetch(BACKEND_SERVER_TOKEN, {
-            method: 'POST', 
-            headers: {
-                'Content-Type': 'Application/json'
-            },
-            body: JSON.stringify({
-                code: code, 
-                codeVerifier: codeVerifier
-            })
-
-        })
-        .then(res => res.json())
-        .then(data => {
-            setAccessToken(data.access_token);
-            window.history.pushState({}, null, "/");
-        })
-        .catch(err => {
-            console.error(err);
-        })
-    }, [code])
-
-    return accessToken;
-}
 
 const handleLogin = async () => {
     const verifier = generateCodeVerifier(128);
@@ -47,7 +16,7 @@ const handleLogin = async () => {
     params.append("client_id", CLIENT_ID);
     params.append("response_type", "code");
     params.append("redirect_uri", 'http://localhost:5173/');
-    params.append("scope", "playlist-modify-public playlist-modify-private playlist-read-private playlist-read-collaborative");
+    params.append("scope", "playlist-modify-public playlist-modify-private playlist-read-private playlist-read-collaborative user-library-read");
     params.append("code_challenge_method", "S256");
     params.append("code_challenge", challenge);
     window.location.href = `https://accounts.spotify.com/authorize?${params.toString()}`;
@@ -78,13 +47,45 @@ const logout = () => {
 }
 
 export function AuthContextProvider({ children }) {
+    const [accessToken, setAccessToken] = useState();
+    const [refreshToken, setRefreshToken] = useState();
+    const [expiresIn, setExpresIn] = useState();
+
+    function getAccessToken(code) {
+
+        useEffect(() => {
+            let codeVerifier = localStorage.getItem('code_verifier');
+            fetch(BACKEND_SERVER_TOKEN, {
+                method: 'POST', 
+                headers: {
+                    'Content-Type': 'Application/json'
+                },
+                body: JSON.stringify({
+                    code: code, 
+                    codeVerifier: codeVerifier
+                })
+    
+            })
+            .then(res => res.json())
+            .then(data => {
+                setAccessToken(data.access_token);
+                window.history.pushState({}, null, "/");
+            })
+            .catch(err => {
+                console.error(err);
+            })
+        }, [code])
+        
+        return accessToken
+    }
     
     return (
         <AuthContext.Provider
             value={{
                 handleLogin, 
                 getAccessToken,
-                logout
+                logout,
+                accessToken
 
             }}
         >

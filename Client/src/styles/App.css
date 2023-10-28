@@ -1,0 +1,8 @@
+#logout {
+    font-size: large;
+    cursor: pointer;
+}
+
+#logout:hover {
+    filter: brightness(150%);
+}
