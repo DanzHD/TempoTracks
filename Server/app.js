@@ -47,5 +47,37 @@ app.post('/api/login', (req, res) => {
         console.error('Error:', err);
     });
 
+})
+
+app.post("/playlist", (req, res) => {
+    const { accessToken, userID } = req.body;
+    
+    fetch(`https://api.spotify.com/v1/users/${userID}/playlists`, 
+    {
+        method: "POST",
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded', 
+            'Authorization': `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({
+            name: "Gym playlist",
+            public: 'false'
+        })
+    })
+    .then(response => {
+        if (!response.ok) {
+            res.status(response.status)
+            throw new Error('HTTP status ' + response.status);
+        }
+
+        return response.json();
+    })
+    .then(data => {
+        return res.json(data);
+    })
+    .catch(err => {
+        console.error(err);
+    })
 
 })

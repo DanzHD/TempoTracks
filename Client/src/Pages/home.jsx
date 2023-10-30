@@ -21,7 +21,6 @@ import {
     
 } from '@chakra-ui/react'
 
-
 import { useAPIContext } from "../Contexts/APIContext";
 
 export default function Home({ code }) {
@@ -101,10 +100,19 @@ export function Stage1({ logout, stage, setStage, setBPM}) {
 }
 
 export function Stage2({ logout, stage, setStage, BPM}) {
-    const { FindSongs } = useAPIContext();
-    FindSongs(BPM);
+    const { FindSongs, getUserID, createPlaylist } = useAPIContext();
+    // FindSongs(BPM);
     
+    
+    const handleClick = () => {
+        getUserID().then(userID => {
 
+            createPlaylist({ userID });
+        });
+    }
+
+
+    
     return (
         <>
     
@@ -122,7 +130,11 @@ export function Stage2({ logout, stage, setStage, BPM}) {
             </Stack>
 
             <Button onClick={() => setStage(1)} />
+            <Button onClick={handleClick} />
+
+            
         </>
+
     )
 
 }

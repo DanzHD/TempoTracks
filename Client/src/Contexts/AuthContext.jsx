@@ -47,9 +47,7 @@ const logout = () => {
 }
 
 export function AuthContextProvider({ children }) {
-    const [accessToken, setAccessToken] = useState();
-    const [refreshToken, setRefreshToken] = useState();
-    const [expiresIn, setExpresIn] = useState();
+
 
     function getAccessToken(code) {
 
@@ -68,7 +66,7 @@ export function AuthContextProvider({ children }) {
             })
             .then(res => res.json())
             .then(data => {
-                setAccessToken(data.access_token);
+                localStorage.setItem('accessToken', data.access_token);
                 window.history.pushState({}, null, "/");
             })
             .catch(err => {
@@ -76,7 +74,6 @@ export function AuthContextProvider({ children }) {
             })
         }, [code])
         
-        return accessToken
     }
     
     return (
@@ -84,8 +81,7 @@ export function AuthContextProvider({ children }) {
             value={{
                 handleLogin, 
                 getAccessToken,
-                logout,
-                accessToken
+                logout
 
             }}
         >
