@@ -81,3 +81,40 @@ app.post("/playlist", (req, res) => {
     })
 
 })
+
+app.post("/playlist/add", (req, res) => {
+    const { accessToken, trackURIs, playlistID } = req.body;
+
+    console.log(req.body)
+    
+
+    const body = JSON.stringify({
+        uris: trackURIs
+    })
+
+    const options = {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json', 
+            'Authorization': `Bearer ${accessToken}`,
+        },
+        body: body
+    }
+
+
+    fetch(`https://api.spotify.com/v1/playlists/${playlistID}/tracks`, options)
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('HTTP status ' + response.status);
+        }
+        
+        return response.json();
+    })
+    .then(data => {
+        return res.json(data);
+        
+    })
+    .catch(err => {
+        console.error('Error:', err);
+    });
+})

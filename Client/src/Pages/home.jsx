@@ -100,14 +100,17 @@ export function Stage1({ logout, stage, setStage, setBPM}) {
 }
 
 export function Stage2({ logout, stage, setStage, BPM}) {
-    const { FindSongs, getUserID, createPlaylist } = useAPIContext();
-    // FindSongs(BPM);
+    const { FindSongs, getUserID, createPlaylist, addPlaylist } = useAPIContext();
+    let trackURI = FindSongs(BPM);
     
     
     const handleClick = () => {
-        getUserID().then(userID => {
+        getUserID().then(async (userID) => {
+            const trackURIs = await trackURI;
+            const playlistID = await createPlaylist({ userID });
+            addPlaylist({ trackURIs, playlistID })
 
-            createPlaylist({ userID });
+
         });
     }
 
