@@ -6,7 +6,7 @@ import './styles/index.css'
 import { ChakraProvider } from '@chakra-ui/react'
 import { APIContextProvider } from './Contexts/APIContext.jsx'
 import { AuthContextProvider } from './Contexts/AuthContext.jsx'
-const code = new URLSearchParams(window.location.search).get("code");
+const code = /*new URLSearchParams(window.location.search).get("code"); */ "a"
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(

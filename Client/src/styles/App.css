@@ -1,6 +1,8 @@
 #logout {
-    font-size: large;
-    cursor: pointer;
+    color: black;
+    background-color: rgb(125, 221, 253);
+    font-family: "Circular Std", sans-serif;
+    font-weight: 800;
 }
 
 #logout:hover {
@@ -12,7 +14,7 @@
     grid-template-rows: 1fr 3fr;
     height: 100vh;
     width: 100%;
-    background-color: #1dB954;
+    background-color: #24a0ed;
 
 }
 
@@ -109,6 +111,7 @@
     background-color: white;
     height: 50px;
     width: 50px;
+    font-size: 22px;
     border-radius: 50%;
 
 
@@ -134,7 +137,6 @@
 .footer {
     grid-row-start: 2;
     height: 100px;
-    background-color: purple;
     width: 100%;
     display: flex;
     justify-content: center;
@@ -142,4 +144,57 @@
     
     background-color: #112035;
     color: white;
+}
+
+.textStyling {
+    font-family: "Circular Std", sans-serif;
+    color: black;
+}
+
+.stage {
+    color: black;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 22px;
+    font-weight: 800;
+}
+
+#headingStyling {
+    font-family: "Circular Std", sans-serif;
+    font-weight: 700;
+}
+
+.wave {
+    display: flex;
+    height: 100%;
+    align-items: flex-end;
+
+
+}
+
+.stage1PageLayout {
+    height: 100vh;
+    display: grid;
+    
+}
+
+.custom-shape-divider-bottom-1699175355 {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+}
+
+.custom-shape-divider-bottom-1699175355 svg {
+    position: relative;
+    display: block;
+    width: calc(208% + 1.3px);
+    height: 363px;
+}
+
+.custom-shape-divider-bottom-1699175355 .shape-fill {
+    fill: #1DB954;
 }
