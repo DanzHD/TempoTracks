@@ -10,7 +10,6 @@ const code = new URLSearchParams(window.location.search).get("code");
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-	
 
 	
 	<ChakraProvider>

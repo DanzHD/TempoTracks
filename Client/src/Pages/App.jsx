@@ -1,16 +1,8 @@
 import { useAuthContext } from '../Contexts/AuthContext'
 import '../styles/App.css'
 import { 
-	Flex,
-	Heading, 
-	Text, 
-	Stack, 
 	Button
 } from '@chakra-ui/react'
-
-
-
-
 
 function App() {
 
@@ -18,19 +10,73 @@ function App() {
 
 	return (
     	<>
-			<Stack spacing={24}>
-				<Flex bg='rgb(54, 184, 100)' height='75px' justifyContent='space-around' padding='20px'>
-					<Heading fontSize='3xl'>Gym-Music</Heading>
-					<Text></Text>
-				</Flex>
+			<div className='landingPage' >
 
-				<Flex flexDirection='column' justifyContent='center' alignItems='center' gap='20px'>
-					<Heading>Create your own personalized Spotify Gym Playlist automatically</Heading>
-					<Text fontSize='xl'>Gym-Music creates a personalized playlist based off your Spotify playlists and liked songs</Text>
-					<Button size='lg' bg='rgb(54, 184, 100) ' colorScheme='' onClick={handleLogin}>Login with Spotify →</Button>
-				</Flex>
-			</Stack>
+				<div id='intro'>
 
+						<h1 className='intro-heading'>Create personalized playlists of your favourite tracks automatically.</h1>
+						<h3 id='intro-text'>Personalize. Create. Jam </h3>
+						<Button marginTop='min(50px, 30%)' w='max(200px, 1em)' bg='#112035' colorScheme='' onClick={handleLogin}>Login with Spotify →</Button>
+
+				</div>
+			</div>
+				
+
+
+			
+			<div id='explanation'>
+
+				<div>How It Works</div>
+
+				<div id='steps'>
+					<div className='step'>
+						<div className='stepHeading'>
+							<div className='whiteCircle'>1</div>
+							<div>Choose a BPM</div>
+						</div>
+
+						<div className='stepExplanation'>
+							Select the track tempo of songs you want in your new playlist.
+						</div>
+					</div>
+
+					<div className='step'>
+						<div className='stepHeading'>
+
+							<div className='whiteCircle'>2</div>
+							<div>Review the tracks</div>
+						</div>
+
+							<div className='stepExplanation'>
+								We'll find tracks within your liked songs and playlists that matches
+								the selected BPM within 5 beats, then you can choose what to keep.
+							</div>
+
+						
+					</div>
+
+					<div className='step'>
+						<div className='stepHeading'>
+
+							<div className='whiteCircle'>3</div>
+							<div>Save to Spotify</div>
+						</div>
+
+						<div className='stepExplanation'>
+							Choose a name for the playlist, and once you're ready, 
+							save the playlist to Spotify. 
+						</div>
+						
+					</div>
+
+				</div>
+				
+			</div>
+
+			
+			<div className='footer'>
+				Made by Daniel Duong
+			</div>
     	</>
 	)
 }
