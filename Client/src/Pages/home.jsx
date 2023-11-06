@@ -1,10 +1,9 @@
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import { useAuthContext } from "../Contexts/AuthContext";
 
 import { 
 	Flex,
-	Heading, 
-	Text, 
+	Heading,
 	Stack, 
 	Button,
     Center,
@@ -98,9 +97,9 @@ export function Stage1({ logout, stage, setStage, setBPM}) {
                 </Flex>
             </Stack>
 
-            <div class="custom-shape-divider-bottom-1699175355">
+            <div className="custom-shape-divider-bottom-1699175355">
                 <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
-                    <path d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z" class="shape-fill"></path>
+                    <path d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z" className="shape-fill"></path>
                 </svg>
             </div>
         </div>
@@ -111,9 +110,33 @@ export function Stage1({ logout, stage, setStage, setBPM}) {
 }
 
 export function Stage2({ logout, stage, setStage, BPM}) {
-    const { FindSongs, getUserID, createPlaylist, addPlaylist } = useAPIContext();
-    let trackURI = FindSongs(BPM);
-    
+    const { FindSongs, getUserID, createPlaylist, addPlaylist, getNumberOfTracks, getTrackInfo } = useAPIContext();
+    const [songsAnalysed, setSongsAnalysed] = useState(0);
+
+    let tracks;
+
+    useEffect(() => {
+
+        (async function() {
+            let numberTracks = await getNumberOfTracks();
+            let trackInfo;
+
+
+
+            for (let i = 0; i < Math.ceil(numberTracks / 50); i++) {
+
+                trackInfo = await getTrackInfo(50 * i);
+
+                tracks = await FindSongs(BPM, trackInfo, songsAnalysed, setSongsAnalysed);
+
+            }
+
+        })();
+
+
+
+    }, []);
+
     
     const handleClick = () => {
         getUserID().then(async (userID) => {
@@ -121,27 +144,26 @@ export function Stage2({ logout, stage, setStage, BPM}) {
             const playlistID = await createPlaylist({ userID });
             addPlaylist({ trackURIs, playlistID })
 
-
         });
     }
 
-
-    
     return (
         <>
-    
-            <Stack spacing={24}>
-                <Flex bg='rgb(54, 184, 100)' height='75px' justifyContent='space-between' padding='20px'>
-                    <Heading fontSize='3xl'>Gym-Music</Heading>
-                    <Text>Step 2 (Placeholder)</Text>
-                    <Text onClick={logout} id="logout">Logout</Text>
-                </Flex>
+            <div>{songsAnalysed}</div>
+            <div className="stage1PageLayout">
+                <Stack className="textStyling" spacing={24}>
+                    <Flex bg='rgb(54, 184, 100)' height='75px' justifyContent='space-between' padding='20px'>
+                        <div></div>
+                        <div className="stage">
+                            <div className="whiteCircle">2</div>
+                            <div>Edit Playlist</div>
+                        </div>
 
-                <Flex flexDirection='column' justifyContent='center' alignItems='center' gap='20px'>
-                    <Heading>Playlist</Heading>
+                        <Button onClick={logout} id="logout">Logout</Button>
+                    </Flex>
+                </Stack>
+            </div>
 
-                </Flex>
-            </Stack>
 
             <Button onClick={() => setStage(1)} />
             <Button onClick={handleClick} />
