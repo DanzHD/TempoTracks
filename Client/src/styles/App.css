@@ -198,3 +198,16 @@
 .custom-shape-divider-bottom-1699175355 .shape-fill {
     fill: #1DB954;
 }
+.loadingBar {
+
+    width: 100%;
+    background-color: rgb(211, 211, 211);
+    height: 5px;
+}
+
+.progressText {
+    font-family: "Circular Std", sans-serif;
+    padding-left: 80%;
+    width: 100%;
+
+}

@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import { useAuthContext } from "../Contexts/AuthContext";
 
 import { 
@@ -12,13 +12,15 @@ import {
     NumberInputField,
     NumberIncrementStepper,
     NumberDecrementStepper,
-    NumberInputStepper
+    NumberInputStepper,
     
     
 } from '@chakra-ui/react'
 
 import { useAPIContext } from "../Contexts/APIContext";
 import '../styles/app.css'
+import Navbar from "../Components/Nav.jsx";
+import LoadingBar from "../Components/loadingBar.jsx";
 
 export default function Home({ code }) {
     
@@ -37,11 +39,11 @@ export default function Home({ code }) {
     )
 }
 
-export function Stage1({ logout, stage, setStage, setBPM}) {
+export function Stage1({ stage, setStage, setBPM }) {
 
     const handleStageUpdate = (e) => {
         e.preventDefault();
-        setStage( stage + 1);
+        setStage(stage + 1);
         setBPM(e.target.BPM.value);
 
     }
@@ -49,15 +51,7 @@ export function Stage1({ logout, stage, setStage, setBPM}) {
     return (
         <div className="stage1PageLayout">
             <Stack className="textStyling" spacing={24}>
-                <Flex bg='rgb(54, 184, 100)' height='75px' justifyContent='space-between' padding='20px'>
-                    <div></div>
-                    <div className="stage">
-                        <div className="whiteCircle">1</div>
-                        <div>Select BPM</div>
-                    </div>
-                    
-                    <Button onClick={logout} id="logout">Logout</Button>
-                </Flex>
+                <Navbar stage='1' backgroundColor='rgb(54, 184, 100)' stageDescription='Enter Tempo' />
 
                 <Flex flexDirection='column' justifyContent='center' alignItems='center' gap='20px'>
                     <Heading id="headingStyling">Enter Tempo</Heading>
@@ -109,18 +103,27 @@ export function Stage1({ logout, stage, setStage, setBPM}) {
     
 }
 
-export function Stage2({ logout, stage, setStage, BPM}) {
+export function Stage2({ setStage, BPM}) {
     const { FindSongs, getUserID, createPlaylist, addPlaylist, getNumberOfTracks, getTrackInfo } = useAPIContext();
     const [songsAnalysed, setSongsAnalysed] = useState(0);
+    const [numberTracks, setNumberTracks] = useState(0);
+    const [loading, setLoading] = useState(true);
 
     let tracks;
 
     useEffect(() => {
+        setLoading(true);
+        (async function() {
+            setNumberTracks((await getNumberOfTracks()))
+        })()
+        setLoading(false);
+    }, [BPM])
+
+
+    useEffect(() => {
 
         (async function() {
-            let numberTracks = await getNumberOfTracks();
             let trackInfo;
-
 
 
             for (let i = 0; i < Math.ceil(numberTracks / 50); i++) {
@@ -130,12 +133,10 @@ export function Stage2({ logout, stage, setStage, BPM}) {
                 tracks = await FindSongs(BPM, trackInfo, songsAnalysed, setSongsAnalysed);
 
             }
-
         })();
 
+    }, [numberTracks]);
 
-
-    }, []);
 
     
     const handleClick = () => {
@@ -149,19 +150,14 @@ export function Stage2({ logout, stage, setStage, BPM}) {
 
     return (
         <>
-            <div>{songsAnalysed}</div>
             <div className="stage1PageLayout">
-                <Stack className="textStyling" spacing={24}>
-                    <Flex bg='rgb(54, 184, 100)' height='75px' justifyContent='space-between' padding='20px'>
-                        <div></div>
-                        <div className="stage">
-                            <div className="whiteCircle">2</div>
-                            <div>Edit Playlist</div>
-                        </div>
+                <div className="textStyling">
+                    <Navbar stage='2' backgroundColor='rgb(54, 184, 100)' stageDescription='Edit Playlist' />
 
-                        <Button onClick={logout} id="logout">Logout</Button>
-                    </Flex>
-                </Stack>
+                    <LoadingBar text={`${songsAnalysed} / ${numberTracks} Tracks Analysed`} progress={songsAnalysed/numberTracks * 100 } color='green' />
+
+                </div>
+
             </div>
 
 

@@ -3,6 +3,7 @@ import '../styles/App.css'
 import { 
 	Button
 } from '@chakra-ui/react'
+import Footer from "../Components/Footer.jsx";
 
 function App() {
 
@@ -20,10 +21,7 @@ function App() {
 
 				</div>
 			</div>
-				
 
-
-			
 			<div id='explanation'>
 
 				<div>How It Works</div>
@@ -72,11 +70,8 @@ function App() {
 				</div>
 				
 			</div>
-
 			
-			<div className='footer'>
-				Made by Daniel Duong
-			</div>
+			<Footer />
     	</>
 	)
 }
