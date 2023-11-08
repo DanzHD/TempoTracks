@@ -45,10 +45,26 @@ export function Stage1({ stage, setStage, setBPM }) {
 
     const handleStageUpdate = (e) => {
         e.preventDefault();
-        setStage(stage + 1);
-        setBPM(e.target.BPM.value);
 
+        setStage(2);
+        setBPM(e.target.BPM.value);
     }
+
+    const preventMinus = (e) => {
+        if (e.code === 'Minus') {
+            e.preventDefault();
+        }
+    }
+
+    const preventPasteNegative = (e) => {
+        const clipboardData = e.clipboardData || window.clipboardData;
+        const pastedData = clipboardData.getData('text');
+
+        if (pastedData.includes('-')) {
+            e.preventDefault();
+        }
+    }
+
 
     return (
         <div className="stage1PageLayout">
@@ -62,16 +78,15 @@ export function Stage1({ stage, setStage, setBPM }) {
 
                         <form onSubmit={handleStageUpdate}>
                             <Flex flexDirection="column" gap='20px'>
-
-                                <FormControl isRequired>
-
-                                    <NumberInput width='lg' min={1} >
+                                <FormControl>
+                                    <NumberInput width='lg' min={1} onKeyDown={preventMinus} onPaste={preventPasteNegative} isRequired>
                                         <NumberInputField name="BPM" />
                                         <NumberInputStepper>
                                             <NumberIncrementStepper />
                                             <NumberDecrementStepper />
                                         </NumberInputStepper>
                                     </NumberInput>
+
                                         
                                 </FormControl>
 
