@@ -121,12 +121,11 @@ app.post("/playlist/add", (req, res) => {
 
 app.post("/tracks/audio-features", (req, res) => {
 
-
-
     const { accessToken, tracks, BPM } = req.body;
+    const trackIds = tracks.map(track => track.ID).toString();
 
 
-    fetch(`https://api.spotify.com/v1/audio-features?ids=${tracks}`, {
+    fetch(`https://api.spotify.com/v1/audio-features?ids=${trackIds}`, {
         method: "GET",
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
@@ -136,11 +135,8 @@ app.post("/tracks/audio-features", (req, res) => {
     .then(res => res.json())
     .then(data => {
         const t = data['audio_features'].filter(track => parseInt(track.tempo) <= parseInt(BPM) + 10 && parseInt(track.tempo) >= parseInt(BPM) - 10);
-
-        return res.send(t);
-
-
-
+        let newTracks = tracks.filter(track => t.some(newTrack => newTrack.id === track.ID))
+        return res.send(newTracks);
 
     })
 

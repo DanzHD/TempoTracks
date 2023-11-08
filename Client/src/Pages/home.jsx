@@ -21,6 +21,8 @@ import { useAPIContext } from "../Contexts/APIContext";
 import '../styles/app.css'
 import Navbar from "../Components/Nav.jsx";
 import LoadingBar from "../Components/loadingBar.jsx";
+import Banner from "../Components/Banner.jsx";
+import PlaylistFooter from "../Components/PlaylistFooter.jsx";
 
 export default function Home({ code }) {
     
@@ -90,11 +92,13 @@ export function Stage1({ stage, setStage, setBPM }) {
                     </Center>
                 </Flex>
             </Stack>
+            <div className='wave'>
 
-            <div className="custom-shape-divider-bottom-1699175355">
-                <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
-                    <path d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z" className="shape-fill"></path>
-                </svg>
+                <div className="custom-shape-divider-bottom-1699175355">
+                    <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                        <path d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z" className="shape-fill"></path>
+                    </svg>
+                </div>
             </div>
         </div>
 
@@ -134,7 +138,6 @@ export function Stage2({ setStage, BPM}) {
                 let newTracks = await FindSongs({ BPM, trackInfo, tracks, setTracks});
 
                 setTracks(tracks => [...tracks, ...newTracks])
-
                 setSongsAnalysed(songsAnalysed => songsAnalysed + trackInfo.length);
 
             }
@@ -156,9 +159,20 @@ export function Stage2({ setStage, BPM}) {
         });
     }
 
+    const handleChangeBPM = () => {
+        setStage(1);
+    }
+
+    const trackItems = tracks.map(track => {
+
+        return <Banner name={track.name} artists={track.artist} image={track.images} uri={track.uri}></Banner>
+    })
+
+
+
     return (
         <>
-            <div className="stage1PageLayout">
+            <div id='stage2PageLayout'>
                 <div className="textStyling">
                     <Navbar stage='2' backgroundColor='rgb(54, 184, 100)' stageDescription='Edit Playlist' />
 
@@ -166,15 +180,37 @@ export function Stage2({ setStage, BPM}) {
 
                 </div>
 
+
+                <section id='songs'>
+                    <Heading style={{marginBottom: '30px'}}>
+                        Songs
+                    </Heading>
+
+                    <Flex flexDirection='column' gap='20px'>
+
+                        {trackItems}
+
+
+                    </Flex>
+
+                </section>
+
+
+
             </div>
 
+            <PlaylistFooter createPlaylist={handleClick} changeBPM={handleChangeBPM} />
 
-            <Button onClick={() => setStage(1)} />
-            <Button onClick={handleClick} />
+            <div className='wave'>
 
-            <Heading>
 
-            </Heading>
+                <div className="custom-shape-divider-bottom-1699175355">
+                    <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                        <path d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z" className="shape-fill"></path>
+                    </svg>
+                </div>
+            </div>
+
         </>
 
     )

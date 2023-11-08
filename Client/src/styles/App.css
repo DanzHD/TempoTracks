@@ -169,7 +169,7 @@
     display: flex;
     height: 100%;
     align-items: flex-end;
-
+    min-height: 500px;
 
 }
 
@@ -210,4 +210,52 @@
     padding-left: 80%;
     width: 100%;
 
+}
+
+#songs {
+    margin-left: clamp(20px, 100px, 200px);
+    font-family: "Circular Std", sans-serif;
+
+
+}
+
+.song {
+    display: flex;
+    align-items: center;
+
+    padding: 20px;
+    width: 90%;
+    height: 100px;
+    background-color: #f4f4f4;
+    border: 2px #f4f4f4;
+}
+
+.songInfo {
+    margin-left: 20px;
+}
+
+#stage2PageLayout {
+    min-height: 100vh;
+}
+
+#playlistFooter {
+    display: flex;
+    padding: 10px;
+    border: lightgrey;
+    position: sticky;
+    justify-content: flex-end;
+    align-items: center;
+    bottom: 0;
+    height: 50px;
+    background-color: #fff;
+    box-sizing: border-box;
+
+
+}
+
+#playlistButtons {
+    display: flex;
+    gap: 20px;
+    padding-right: 10%;
+    color: white;
 }

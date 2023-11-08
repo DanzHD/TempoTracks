@@ -42,13 +42,20 @@ const FindSongs = async ({ BPM, trackInfo }) => {
 
     const accessToken = localStorage.getItem('accessToken');
 
-    const tracksID = trackInfo.map(track => track.id);
-
+    const tracks = trackInfo.map(track => {
+        return {
+            ID: track.id,
+            images: track.album.images,
+            name: track.name,
+            artist: track.artists,
+            uri: track.uri
+        }
+    });
 
 
     const body = JSON.stringify({
         accessToken: accessToken,
-        tracks: tracksID.toString(),
+        tracks: tracks,
         BPM: BPM
     })
 
