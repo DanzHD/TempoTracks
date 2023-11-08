@@ -85,7 +85,7 @@ app.post("/playlist", (req, res) => {
 app.post("/playlist/add", (req, res) => {
     const { accessToken, trackURIs, playlistID } = req.body;
 
-    console.log(req.body)
+
     
 
     const body = JSON.stringify({
@@ -117,4 +117,32 @@ app.post("/playlist/add", (req, res) => {
     .catch(err => {
         console.error('Error:', err);
     });
+})
+
+app.post("/tracks/audio-features", (req, res) => {
+
+
+
+    const { accessToken, tracks, BPM } = req.body;
+
+
+    fetch(`https://api.spotify.com/v1/audio-features?ids=${tracks}`, {
+        method: "GET",
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Authorization': `Bearer ${accessToken}`
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        const t = data['audio_features'].filter(track => parseInt(track.tempo) <= parseInt(BPM) + 10 && parseInt(track.tempo) >= parseInt(BPM) - 10);
+
+        return res.send(t);
+
+
+
+
+    })
+
+
 })

@@ -38,33 +38,32 @@ const getTrackInfo = async (offset) => {
 }
 
 
-const FindSongs = async (BPM, trackInfo, songsAnalysed, setSongsAnalysed) => {
+const FindSongs = async ({ BPM, trackInfo }) => {
 
     const accessToken = localStorage.getItem('accessToken');
-    const tracks = []
 
-    const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+    const tracksID = trackInfo.map(track => track.id);
 
-    for (let i = 0; i < trackInfo.length; i++) {
-        let track = trackInfo[i]
-        fetch(`https://api.spotify.com/v1/audio-analysis/${track.id}`, {
-            method: "GET",
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Authorization': `Bearer ${accessToken}`
-            }
-        })
-        .then(res => res.json())
-        .then(data => {
-            if ((parseInt(BPM) + 10 >= parseInt(data.track.tempo)) && (parseInt(data.track.tempo) >= parseInt(BPM) - 10)) {
-                tracks.push(track.uri);
-            }
-        })
-        setSongsAnalysed(songsAnalysed => songsAnalysed + 1);
-        await delay(600)
-    }
 
-    return tracks;
+
+    const body = JSON.stringify({
+        accessToken: accessToken,
+        tracks: tracksID.toString(),
+        BPM: BPM
+    })
+
+    return fetch(`http://localhost:3000/tracks/audio-features`, {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: body
+    })
+    .then(res => res.json())
+
+
+
+
 
 }
 

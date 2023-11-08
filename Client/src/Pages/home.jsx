@@ -108,8 +108,9 @@ export function Stage2({ setStage, BPM}) {
     const [songsAnalysed, setSongsAnalysed] = useState(0);
     const [numberTracks, setNumberTracks] = useState(0);
     const [loading, setLoading] = useState(true);
+    const [tracks, setTracks] = useState([])
 
-    let tracks;
+
 
     useEffect(() => {
         setLoading(true);
@@ -126,22 +127,29 @@ export function Stage2({ setStage, BPM}) {
             let trackInfo;
 
 
+
             for (let i = 0; i < Math.ceil(numberTracks / 50); i++) {
 
                 trackInfo = await getTrackInfo(50 * i);
+                let newTracks = await FindSongs({ BPM, trackInfo, tracks, setTracks});
 
-                tracks = await FindSongs(BPM, trackInfo, songsAnalysed, setSongsAnalysed);
+                setTracks(tracks => [...tracks, ...newTracks])
+
+                setSongsAnalysed(songsAnalysed => songsAnalysed + trackInfo.length);
 
             }
-        })();
 
+        })();
     }, [numberTracks]);
 
 
-    
+
+
+
     const handleClick = () => {
         getUserID().then(async (userID) => {
-            const trackURIs = await trackURI;
+
+            let trackURIs = tracks.map(track => track.uri);
             const playlistID = await createPlaylist({ userID });
             addPlaylist({ trackURIs, playlistID })
 
@@ -164,7 +172,9 @@ export function Stage2({ setStage, BPM}) {
             <Button onClick={() => setStage(1)} />
             <Button onClick={handleClick} />
 
-            
+            <Heading>
+
+            </Heading>
         </>
 
     )
