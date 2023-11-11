@@ -167,7 +167,7 @@ export function Stage2({ setStage, BPM}) {
     const handleClick = () => {
         getUserID().then(async (userID) => {
 
-            let trackURIs = tracks.map(track => track.uri);
+            let trackURIs = tracks.filter(track => selectedTracks.includes(track.ID)).map(track => track.uri);
             const playlistID = await createPlaylist({ userID });
             addPlaylist({ trackURIs, playlistID })
 
@@ -178,10 +178,29 @@ export function Stage2({ setStage, BPM}) {
         setStage(1);
     }
 
-    const trackItems = tracks.map(track => {
 
-        return <Banner name={track.name} artists={track.artist} image={track.images} uri={track.uri}></Banner>
-    })
+
+    const [selectedTracks, setSelectedTracks] = useState([]);
+    useEffect(() => {
+        const selectedTrackIDs = tracks.map(track => track.ID);
+        setSelectedTracks(selectedTrackIDs);
+    }, [tracks])
+
+    const trackItems = tracks.map(track =>
+            <Banner key={track.ID} name={track.name}
+                    artists={track.artist}
+                    image={track.images}
+                    uri={track.uri}
+                    setSelectedTracks={setSelectedTracks}
+                    selectedTracks={selectedTracks}
+                    ID={track.ID}
+            >
+            </Banner>
+    )
+
+
+
+
 
 
 

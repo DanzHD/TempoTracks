@@ -85,7 +85,8 @@
 #explanation {
     display: flex;
     gap: 50px;
-    height: 50vh;
+    height: clamp(600px, 50vh, 50vh);
+
     font-size: 26px;
     flex-direction: column;
     color: white;
@@ -100,7 +101,17 @@
     display: flex;
     justify-content: space-evenly;
     width: 100%;
-    
+
+}
+
+@media only screen and (max-width: 850px) {
+    #steps {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+
+
 }
 
 .whiteCircle {

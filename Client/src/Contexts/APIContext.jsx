@@ -48,7 +48,7 @@ const FindSongs = async ({ BPM, trackInfo }) => {
             images: track.album.images,
             name: track.name,
             artist: track.artists,
-            uri: track.uri
+            uri: track.uri,
         }
     });
 
@@ -67,9 +67,6 @@ const FindSongs = async ({ BPM, trackInfo }) => {
         body: body
     })
     .then(res => res.json())
-
-
-
 
 
 }
