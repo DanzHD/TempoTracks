@@ -184,7 +184,7 @@
 
 }
 
-.stage1PageLayout {
+.stage1PageLayout, .stage3PageLayout {
     height: 100vh;
     display: grid;
     
@@ -269,4 +269,6 @@
     gap: 20px;
     padding-right: 10%;
     color: white;
+
 }
+

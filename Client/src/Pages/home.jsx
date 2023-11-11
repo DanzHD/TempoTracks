@@ -1,20 +1,20 @@
-import { useEffect, useState } from "react";
+import {useEffect, useMemo, useState} from "react";
 import { useAuthContext } from "../Contexts/AuthContext";
 
-import { 
-	Flex,
-	Heading,
-	Stack, 
-	Button,
+import {
+    Flex,
+    Heading,
+    Stack,
+    Button,
     Center,
     FormControl,
     NumberInput,
     NumberInputField,
     NumberIncrementStepper,
     NumberDecrementStepper,
-    NumberInputStepper,
-    
-    
+    NumberInputStepper, Text,
+
+
 } from '@chakra-ui/react'
 
 import { useAPIContext } from "../Contexts/APIContext";
@@ -30,12 +30,14 @@ export default function Home({ code }) {
     const [stage, setStage] = useState(1);
     const [BPM, setBPM] = useState(0);
     getAccessToken(code);
-    
+
     return (
         <>
-            {stage === 1 && <Stage1 logout={logout} setStage={setStage} stage={stage} setBPM={setBPM} />} 
+            {stage === 1 && <Stage1 setStage={setStage} stage={stage} setBPM={setBPM} />}
             
-            {stage === 2 && <Stage2 logout={logout} stage={stage} setStage={setStage} BPM={BPM} />}
+            {stage === 2 && <Stage2 stage={stage} setStage={setStage} BPM={BPM} />}
+
+            {stage === 3 && <Stage3 setStage={setStage} />}
             
         </>
     )
@@ -124,28 +126,26 @@ export function Stage1({ stage, setStage, setBPM }) {
 
 export function Stage2({ setStage, BPM}) {
     const { FindSongs, getUserID, createPlaylist, addPlaylist, getNumberOfTracks, getTrackInfo } = useAPIContext();
-    const [songsAnalysed, setSongsAnalysed] = useState(0);
-    const [numberTracks, setNumberTracks] = useState(0);
+    const [songsAnalysed, setSongsAnalysed] = useState(null);
+    const [numberTracks, setNumberTracks] = useState(null);
     const [loading, setLoading] = useState(true);
     const [tracks, setTracks] = useState([])
+    const [creatingPlaylist, setCreatingPlaylist] = useState(false);
 
-
-
-    useEffect(() => {
+    useMemo(() => {
         setLoading(true);
         (async function() {
-            setNumberTracks((await getNumberOfTracks()))
+            setNumberTracks(await getNumberOfTracks())
         })()
         setLoading(false);
     }, [BPM])
 
 
     useEffect(() => {
-
         (async function() {
+            setLoading(true);
             let trackInfo;
-
-
+            setSongsAnalysed(songsAnalysed => 0);
 
             for (let i = 0; i < Math.ceil(numberTracks / 50); i++) {
 
@@ -156,29 +156,27 @@ export function Stage2({ setStage, BPM}) {
                 setSongsAnalysed(songsAnalysed => songsAnalysed + trackInfo.length);
 
             }
-
+            setLoading(false);
         })();
+
     }, [numberTracks]);
-
-
-
-
 
     const handleClick = () => {
         getUserID().then(async (userID) => {
+            setCreatingPlaylist(creatingPlaylist => true);
 
             let trackURIs = tracks.filter(track => selectedTracks.includes(track.ID)).map(track => track.uri);
             const playlistID = await createPlaylist({ userID });
             addPlaylist({ trackURIs, playlistID })
 
+            setCreatingPlaylist(false);
+            setStage(3);
         });
     }
 
     const handleChangeBPM = () => {
         setStage(1);
     }
-
-
 
     const [selectedTracks, setSelectedTracks] = useState([]);
     useEffect(() => {
@@ -198,55 +196,90 @@ export function Stage2({ setStage, BPM}) {
             </Banner>
     )
 
+    if (numberTracks !== null) {
+        return (
+            <>
+                <div id='stage2PageLayout'>
+                    <div className="textStyling">
+                        <Navbar stage='2' backgroundColor='rgb(54, 184, 100)' stageDescription='Edit Playlist'/>
+
+                        <LoadingBar text={`${songsAnalysed} / ${numberTracks} Tracks Analysed`}
+                                    progress={songsAnalysed / numberTracks * 100} color='green'/>
+
+                    </div>
 
 
+                    <section id='songs'>
+                        <Heading style={{marginBottom: '30px'}}>
+                            Songs
+                        </Heading>
+
+                        <Flex flexDirection='column' gap='20px'>
+
+                            {trackItems}
 
 
+                        </Flex>
 
+                    </section>
+
+                </div>
+
+                <PlaylistFooter creatingPlaylist={creatingPlaylist} createPlaylist={handleClick} changeBPM={handleChangeBPM} loading={loading}/>
+
+                <div className='wave'>
+
+
+                    <div className="custom-shape-divider-bottom-1699175355">
+                        <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120"
+                             preserveAspectRatio="none">
+                            <path
+                                d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z"
+                                className="shape-fill"></path>
+                        </svg>
+                    </div>
+                </div>
+
+            </>
+
+        )
+    } else {
+        return <div>loading...</div>
+    }
+}
+
+export function Stage3({ setStage }) {
+
+    const handleClick = () => {
+        setStage(1);
+    }
 
     return (
         <>
-            <div id='stage2PageLayout'>
-                <div className="textStyling">
-                    <Navbar stage='2' backgroundColor='rgb(54, 184, 100)' stageDescription='Edit Playlist' />
+            <div className="stage3PageLayout">
+                <Stack className="textStyling" spacing={24}>
+                    <Navbar stage='3' backgroundColor='rgb(54, 184, 100)' stageDescription='Play on Spotify' />
 
-                    <LoadingBar text={`${songsAnalysed} / ${numberTracks} Tracks Analysed`} progress={songsAnalysed/numberTracks * 100 } color='green' />
+                    <Flex flexDirection='column' justifyContent='center' alignItems='center'>
 
-                </div>
-
-
-                <section id='songs'>
-                    <Heading style={{marginBottom: '30px'}}>
-                        Songs
-                    </Heading>
-
-                    <Flex flexDirection='column' gap='20px'>
-
-                        {trackItems}
-
-
+                        <Heading>Playlist has now been created!</Heading>
+                        <Button onClick={handleClick}>Create another playlist</Button>
                     </Flex>
 
-                </section>
+                </Stack>
+                <div className='wave'>
 
-
-
-            </div>
-
-            <PlaylistFooter createPlaylist={handleClick} changeBPM={handleChangeBPM} />
-
-            <div className='wave'>
-
-
-                <div className="custom-shape-divider-bottom-1699175355">
-                    <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
-                        <path d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z" className="shape-fill"></path>
-                    </svg>
+                    <div className="custom-shape-divider-bottom-1699175355">
+                        <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                            <path d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z" className="shape-fill"></path>
+                        </svg>
+                    </div>
                 </div>
             </div>
-
         </>
-
     )
+
+
+
 
 }
