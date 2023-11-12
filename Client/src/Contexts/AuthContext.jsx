@@ -51,9 +51,10 @@ const logout = () => {
 export function AuthContextProvider({ children }) {
 
 
-    function getAccessToken(code) {
+    function getAccessToken({code, setAccessToken}) {
 
         useEffect(() => {
+
             let codeVerifier = localStorage.getItem('code_verifier');
             fetch(BACKEND_SERVER_TOKEN, {
                 method: 'POST', 
@@ -69,11 +70,13 @@ export function AuthContextProvider({ children }) {
             .then(res => res.json())
             .then(data => {
                 localStorage.setItem('accessToken', data.access_token);
+                setAccessToken(data.access_token);
                 window.history.pushState({}, null, "/");
             })
             .catch(err => {
                 console.error(err);
             })
+
         }, [code])
         
     }
