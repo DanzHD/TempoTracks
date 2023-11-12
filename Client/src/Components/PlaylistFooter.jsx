@@ -2,7 +2,6 @@ import {Button, Spinner} from "@chakra-ui/react";
 
 export default function PlaylistFooter({ creatingPlaylist, createPlaylist, changeBPM, loading }) {
 
-
     return (
         <div id='playlistFooter'>
             <div id='playlistButtons'>
@@ -15,7 +14,6 @@ export default function PlaylistFooter({ creatingPlaylist, createPlaylist, chang
                     Change BPM
                 </Button>
             </div>
-
         </div>
     )
 }

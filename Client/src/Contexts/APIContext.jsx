@@ -1,33 +1,33 @@
-import {createContext, useContext, useEffect} from "react";
+import { createContext, useContext } from "react";
 
 export const APIContext = createContext(null);
 
 const getNumberOfTracks = async () => {
     const accessToken = localStorage.getItem('accessToken')
-
-    return await fetch("https://api.spotify.com/v1/me/tracks",
-        {
-            method: "GET",
+    const options = {
+        method: "GET",
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
                 'Authorization': `Bearer ${accessToken}`
-            }
-        })
+        }
+    }
+
+    return await fetch("https://api.spotify.com/v1/me/tracks", options)
         .then(res => res.json())
         .then(data => data.total);
 }
 
 const getTrackInfo = async (offset) => {
     const accessToken = localStorage.getItem('accessToken')
+    const options = {
+        method: "GET",
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Authorization': `Bearer ${accessToken}`
+        }
+    }
 
-    return await fetch(`https://api.spotify.com/v1/me/tracks?offset=${offset}&limit=50`,
-        {
-            method: "GET",
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Authorization': `Bearer ${accessToken}`
-            }
-        })
+    return await fetch(`https://api.spotify.com/v1/me/tracks?offset=${offset}&limit=50`, options)
         .then(res => res.json())
         .then(data => data.items)
         .then(tracks => tracks.map(track => track.track))
@@ -58,30 +58,30 @@ const FindSongs = async ({ BPM, trackInfo }) => {
         tracks: tracks,
         BPM: BPM
     })
-
-    return fetch(`http://localhost:3000/tracks/audio-features`, {
+    const options = {
         method: "POST",
         headers: {
             'Content-Type': 'application/json'
         },
         body: body
-    })
-    .then(res => res.json())
+    }
+    return fetch(`http://localhost:3000/tracks/audio-features`, options)
+        .then(res => res.json())
 
 
 }
 
 const getUserID = () => {
     const accessToken = localStorage.getItem('accessToken');
+    const options = {
+        method: "GET",
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Authorization': `Bearer ${accessToken}`
+        }
+    }
 
-    return fetch("https://api.spotify.com/v1/me",
-        {
-            method: "GET",
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Authorization': `Bearer ${accessToken}`
-            }
-        })
+    return fetch("https://api.spotify.com/v1/me", options)
         .then(res => res.json())
         .then(data => data.id);
 
@@ -90,9 +90,8 @@ const getUserID = () => {
 const createPlaylist = async ({ userID }) => {
 
     const accessToken = localStorage.getItem('accessToken');
-
     let playlistID;
-    playlistID = await fetch('http://localhost:3000/playlist', {
+    const options = {
         method: "POST",
         headers: {
             'Content-Type': 'application/json'
@@ -101,7 +100,8 @@ const createPlaylist = async ({ userID }) => {
             accessToken: accessToken,
             userID: userID
         })
-    })
+    }
+    playlistID = await fetch('http://localhost:3000/playlist', options)
         .then(res => res.json())
         .then(data => data.id)
         .catch(err => console.log(err));

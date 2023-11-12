@@ -49,8 +49,6 @@ function App() {
 								We'll find tracks within your liked songs and playlists that matches
 								the selected BPM within 5 beats, then you can choose what to keep.
 							</div>
-
-						
 					</div>
 
 					<div className='step'>
@@ -64,9 +62,7 @@ function App() {
 							Choose a name for the playlist, and once you're ready, 
 							save the playlist to Spotify. 
 						</div>
-						
 					</div>
-
 				</div>
 				
 			</div>

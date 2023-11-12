@@ -1,9 +1,6 @@
 import {Checkbox} from "@chakra-ui/react";
 
 export default function Banner({ name, image, artists, uri, setSelectedTracks, selectedTracks, ID}) {
-
-
-
     function handleCheckBoxChange(e) {
         if (!e.target.checked) {
             setSelectedTracks(selectedTracks => selectedTracks.filter(trackID => trackID !== ID));
@@ -12,8 +9,6 @@ export default function Banner({ name, image, artists, uri, setSelectedTracks, s
         }
 
     }
-
-
 
     return (
         <>

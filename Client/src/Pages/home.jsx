@@ -12,7 +12,7 @@ import {
     NumberInputField,
     NumberIncrementStepper,
     NumberDecrementStepper,
-    NumberInputStepper, Text,
+    NumberInputStepper
 
 
 } from '@chakra-ui/react'
@@ -28,7 +28,7 @@ import App from "./App.jsx";
 export default function Home({ code }) {
     const [accessToken, setAccessToken] = useState(localStorage.getItem('accessToken'));
     
-    const { getAccessToken, logout } = useAuthContext();
+    const { getAccessToken } = useAuthContext();
     const [stage, setStage] = useState(1);
     const [BPM, setBPM] = useState(0);
     getAccessToken({code, setAccessToken});
@@ -50,7 +50,7 @@ export default function Home({ code }) {
     }
 }
 
-export function Stage1({ stage, setStage, setBPM }) {
+export function Stage1({ setStage, setBPM }) {
 
     const handleStageUpdate = (e) => {
         e.preventDefault();
@@ -131,7 +131,7 @@ export function Stage1({ stage, setStage, setBPM }) {
     
 }
 
-export function Stage2({ setStage, BPM}) {
+export function Stage2({ setStage, BPM }) {
     const { FindSongs, getUserID, createPlaylist, addPlaylist, getNumberOfTracks, getTrackInfo } = useAPIContext();
     const [songsAnalysed, setSongsAnalysed] = useState(null);
     const [numberTracks, setNumberTracks] = useState(null);
@@ -285,8 +285,5 @@ export function Stage3({ setStage }) {
             </div>
         </>
     )
-
-
-
 
 }

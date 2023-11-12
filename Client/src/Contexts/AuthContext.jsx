@@ -4,8 +4,6 @@ import { CLIENT_ID } from "../utils/Constants";
 
 export const AuthContext = createContext(null);
 
-
-
 const handleLogin = async () => {
     const verifier = generateCodeVerifier(128);
     const challenge = await generateCodeChallenge(verifier);
@@ -49,7 +47,6 @@ const logout = () => {
 }
 
 export function AuthContextProvider({ children }) {
-
 
     function getAccessToken({code, setAccessToken}) {
 
