@@ -69,7 +69,6 @@ export function AuthContextProvider({ children }) {
             .then(res => res.json())
             .then(data => {
                 localStorage.setItem('accessToken', data.access_token);
-                localStorage.setItem('refreshToken', data.refresh_token);
                 window.history.pushState({}, null, "/");
             })
             .catch(err => {
@@ -78,29 +77,13 @@ export function AuthContextProvider({ children }) {
         }, [code])
         
     }
-
-    function refreshToken() {
-        useEffect(() => {
-            const refreshToken = localStorage.getItem('refreshToken');
-
-            if (!refreshToken) return;
-
-            const refresh = async () => {
-
-            }
-
-            refresh();
-            setInterval(refresh, 1800000)
-        }, [])
-    }
     
     return (
         <AuthContext.Provider
             value={{
                 handleLogin, 
                 getAccessToken,
-                logout,
-                refreshToken
+                logout
 
             }}
         >

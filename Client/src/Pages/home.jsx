@@ -23,6 +23,7 @@ import Navbar from "../Components/Nav.jsx";
 import LoadingBar from "../Components/loadingBar.jsx";
 import Banner from "../Components/Banner.jsx";
 import PlaylistFooter from "../Components/PlaylistFooter.jsx";
+import App from "./App.jsx";
 
 export default function Home({ code }) {
     
@@ -30,17 +31,23 @@ export default function Home({ code }) {
     const [stage, setStage] = useState(1);
     const [BPM, setBPM] = useState(0);
     getAccessToken(code);
+    const accessToken = localStorage.getItem('accessToken');
+    if (!accessToken) {
+        return <App />
+    } else {
 
-    return (
-        <>
-            {stage === 1 && <Stage1 setStage={setStage} stage={stage} setBPM={setBPM} />}
-            
-            {stage === 2 && <Stage2 stage={stage} setStage={setStage} BPM={BPM} />}
 
-            {stage === 3 && <Stage3 setStage={setStage} />}
-            
-        </>
-    )
+        return (
+            <>
+                {stage === 1 && <Stage1 setStage={setStage} stage={stage} setBPM={setBPM}/>}
+
+                {stage === 2 && <Stage2 stage={stage} setStage={setStage} BPM={BPM}/>}
+
+                {stage === 3 && <Stage3 setStage={setStage}/>}
+
+            </>
+        )
+    }
 }
 
 export function Stage1({ stage, setStage, setBPM }) {
