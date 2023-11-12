@@ -26,17 +26,12 @@ import PlaylistFooter from "../Components/PlaylistFooter.jsx";
 import App from "./App.jsx";
 
 export default function Home({ code }) {
-    const [accessToken, setAccessToken] = useState(null);
+    const [accessToken, setAccessToken] = useState(localStorage.getItem('accessToken'));
     
     const { getAccessToken, logout } = useAuthContext();
     const [stage, setStage] = useState(1);
     const [BPM, setBPM] = useState(0);
-
-
     getAccessToken({code, setAccessToken});
-
-
-
 
     if (!accessToken) {
         return <App />
