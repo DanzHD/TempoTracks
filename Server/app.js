@@ -5,14 +5,21 @@ const bodyParser = require('body-parser');
 require("dotenv").config();
 
 
-app.listen(3000, (err) => {
+const PORT = process.env.PORT || 5001
+
+app.get("/", (req, res) => {
+    res.send("Test")
+})
+app.listen(PORT, (err) => {
     
-    console.log(`Server is running on port ${process.env.API_PORT}`);
+    console.log(`Server is running on port ${PORT}`);
 });
+
 
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true}));
+
 
 app.post('/api/login', (req, res) => {
     let body = new URLSearchParams({
@@ -24,13 +31,12 @@ app.post('/api/login', (req, res) => {
     });
 
 
-    fetch(process.env.SPOTIFY_TOKEN_LINK, {
+    fetch("https://accounts.spotify.com/api/token", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
         },
         body: body
-        
     })
     .then(response => {
         if (!response.ok) {
@@ -40,6 +46,7 @@ app.post('/api/login', (req, res) => {
         return response.json();
     })
     .then(data => {
+        console.log("More Testing")
         return res.json(data);
         
     })
@@ -51,20 +58,20 @@ app.post('/api/login', (req, res) => {
 
 app.post("/playlist", (req, res) => {
     const { accessToken, userID } = req.body;
-    
-    fetch(`https://api.spotify.com/v1/users/${userID}/playlists`, 
-    {
+    const options = {
         method: "POST",
         mode: 'cors',
         headers: {
-            'Content-Type': 'application/x-www-form-urlencoded', 
+            'Content-Type': 'application/x-www-form-urlencoded',
             'Authorization': `Bearer ${accessToken}`,
         },
         body: JSON.stringify({
             name: "Gym playlist",
             public: 'false'
         })
-    })
+    }
+    
+    fetch(`https://api.spotify.com/v1/users/${userID}/playlists`,options)
     .then(response => {
         if (!response.ok) {
             res.status(response.status)
@@ -84,9 +91,6 @@ app.post("/playlist", (req, res) => {
 
 app.post("/playlist/add", (req, res) => {
     const { accessToken, trackURIs, playlistID } = req.body;
-
-
-    
 
     const body = JSON.stringify({
         uris: trackURIs
@@ -123,22 +127,19 @@ app.post("/tracks/audio-features", (req, res) => {
 
     const { accessToken, tracks, BPM } = req.body;
     const trackIds = tracks.map(track => track.ID).toString();
-
-
-    fetch(`https://api.spotify.com/v1/audio-features?ids=${trackIds}`, {
+    const options = {
         method: "GET",
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
             'Authorization': `Bearer ${accessToken}`
         }
-    })
+    }
+
+    fetch(`https://api.spotify.com/v1/audio-features?ids=${trackIds}`, options)
     .then(res => res.json())
     .then(data => {
         const t = data['audio_features'].filter(track => parseInt(track.tempo) <= parseInt(BPM) + 10 && parseInt(track.tempo) >= parseInt(BPM) - 10);
         let newTracks = tracks.filter(track => t.some(newTrack => newTrack.id === track.ID))
         return res.send(newTracks);
-
     })
-
-
 })
