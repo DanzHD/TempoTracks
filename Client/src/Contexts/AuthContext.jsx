@@ -69,7 +69,6 @@ export function AuthContextProvider({ children }) {
                 localStorage.setItem('accessToken', data.access_token);
                 setAccessToken(data.access_token);
                 window.history.pushState({}, null, "/");
-                console.log(data.access_token);
             })
             .catch(err => {
                 console.error(err);
