@@ -18,7 +18,7 @@ import {
 } from '@chakra-ui/react'
 
 import { useAPIContext } from "../Contexts/APIContext";
-import '../styles/app.css'
+import '../styles/App.css'
 import Navbar from "../Components/Nav.jsx";
 import LoadingBar from "../Components/loadingBar.jsx";
 import Banner from "../Components/Banner.jsx";
@@ -73,7 +73,6 @@ export function Stage1({ setStage, setBPM }) {
             e.preventDefault();
         }
     }
-
 
     return (
         <div className="stage1PageLayout">

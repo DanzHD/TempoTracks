@@ -65,7 +65,7 @@ const FindSongs = async ({ BPM, trackInfo }) => {
         },
         body: body
     }
-    return fetch(`http://localhost:3000/tracks/audio-features`, options)
+    return fetch(`https://tempotracks-65f5e5cc18fc.herokuapp.com/audio-features`, options)
         .then(res => res.json())
 
 
@@ -101,7 +101,7 @@ const createPlaylist = async ({ userID }) => {
             userID: userID
         })
     }
-    playlistID = await fetch('http://localhost:3000/playlist', options)
+    playlistID = await fetch('https://tempotracks-65f5e5cc18fc.herokuapp.com/playlist', options)
         .then(res => res.json())
         .then(data => data.id)
         .catch(err => console.log(err));
@@ -126,12 +126,9 @@ const addPlaylist = async ({ trackURIs, playlistID }) => {
         body: body
     }
 
-    fetch('http://localhost:3000/playlist/add', options)
+    fetch('https://tempotracks-65f5e5cc18fc.herokuapp.com/playlist/add', options)
     .catch(err => console.error(err));
 }
-
-
-
 
 export function APIContextProvider({ children }) {
     

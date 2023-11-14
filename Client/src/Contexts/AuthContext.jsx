@@ -53,7 +53,7 @@ export function AuthContextProvider({ children }) {
         useEffect(() => {
 
             let codeVerifier = localStorage.getItem('code_verifier');
-            fetch(BACKEND_SERVER_TOKEN, {
+            fetch(`${BACKEND_SERVER_TOKEN}api/login`, {
                 method: 'POST', 
                 headers: {
                     'Content-Type': 'Application/json'
@@ -69,6 +69,7 @@ export function AuthContextProvider({ children }) {
                 localStorage.setItem('accessToken', data.access_token);
                 setAccessToken(data.access_token);
                 window.history.pushState({}, null, "/");
+                console.log(data.access_token);
             })
             .catch(err => {
                 console.error(err);
