@@ -13,7 +13,7 @@ const handleLogin = async () => {
     const params = new URLSearchParams();
     params.append("client_id", CLIENT_ID);
     params.append("response_type", "code");
-    params.append("redirect_uri", 'http://localhost:5173/');
+    params.append("redirect_uri", 'https://tempotracks.vercel.app/');
     params.append("scope", "playlist-modify-public playlist-modify-private playlist-read-private playlist-read-collaborative user-library-read");
     params.append("code_challenge_method", "S256");
     params.append("code_challenge", challenge);
