@@ -29,7 +29,7 @@ app.post('/api/login', (req, res) => {
         client_id: process.env.CLIENT_ID, 
         code_verifier: req.body.codeVerifier
     });
-
+    console.log(body);
 
     fetch("https://accounts.spotify.com/api/token", {
         method: 'POST',
