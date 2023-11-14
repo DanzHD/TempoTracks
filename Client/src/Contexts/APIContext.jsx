@@ -65,7 +65,7 @@ const FindSongs = async ({ BPM, trackInfo }) => {
         },
         body: body
     }
-    return fetch(`https://tempotracks-65f5e5cc18fc.herokuapp.com/audio-features`, options)
+    return fetch(`https://tempotracks-65f5e5cc18fc.herokuapp.com/tracks/audio-features`, options)
         .then(res => res.json())
 
 
