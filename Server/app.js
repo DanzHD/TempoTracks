@@ -29,16 +29,15 @@ app.post('/api/login', (req, res) => {
         client_id: process.env.CLIENT_ID, 
         code_verifier: req.body.codeVerifier
     });
+    console.log("Testing");
 
-    const options = {
+    fetch("https://accounts.spotify.com/api/token", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
         },
         body: body
-    }
-
-    fetch("https://accounts.spotify.com/api/token", options)
+    })
     .then(response => {
         if (!response.ok) {
             throw new Error('HTTP status ' + response.status);
