@@ -1,6 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { BACKEND_SERVER_TOKEN } from "../utils/Constants";
-import { CLIENT_ID } from "../utils/Constants";
+import { CLIENT_ID, BACKEND_SERVER, REDIRECT_URI } from "../utils/Constants";
 
 export const AuthContext = createContext(null);
 
@@ -13,7 +12,7 @@ const handleLogin = async () => {
     const params = new URLSearchParams();
     params.append("client_id", CLIENT_ID);
     params.append("response_type", "code");
-    params.append("redirect_uri", 'https://tempotracks.vercel.app/');
+    params.append("redirect_uri", `${REDIRECT_URI}/`);
     params.append("scope", "playlist-modify-public playlist-modify-private playlist-read-private playlist-read-collaborative user-library-read");
     params.append("code_challenge_method", "S256");
     params.append("code_challenge", challenge);
@@ -53,35 +52,35 @@ export function AuthContextProvider({ children }) {
         useEffect(() => {
 
             let codeVerifier = localStorage.getItem('code_verifier');
-            fetch(`${BACKEND_SERVER_TOKEN}api/login`, {
-                method: 'POST', 
+            fetch(`${BACKEND_SERVER}/api/login`, {
+                method: 'POST',
                 headers: {
                     'Content-Type': 'Application/json'
                 },
                 body: JSON.stringify({
-                    code: code, 
+                    code: code,
                     codeVerifier: codeVerifier
                 })
-    
+
             })
-            .then(res => res.json())
-            .then(data => {
-                localStorage.setItem('accessToken', data.access_token);
-                setAccessToken(data.access_token);
-                window.history.pushState({}, null, "/");
-            })
-            .catch(err => {
-                console.error(err);
-            })
+                .then(res => res.json())
+                .then(data => {
+                    localStorage.setItem('accessToken', data.access_token);
+                    setAccessToken(data.access_token);
+                    window.history.pushState({}, null, "/");
+                })
+                .catch(err => {
+                    console.error(err);
+                })
 
         }, [code])
-        
+
     }
-    
+
     return (
         <AuthContext.Provider
             value={{
-                handleLogin, 
+                handleLogin,
                 getAccessToken,
                 logout
 

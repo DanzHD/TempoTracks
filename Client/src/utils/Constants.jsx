@@ -1,2 +1,3 @@
-export const CLIENT_ID = "51968882bd9041d996bab0c01aac2d13"
-export const BACKEND_SERVER_TOKEN = "https://tempotracks-65f5e5cc18fc.herokuapp.com/"
+export const CLIENT_ID = import.meta.env.VITE_CLIENT_ID;
+export const BACKEND_SERVER = import.meta.env.VITE_BACKEND;
+export const REDIRECT_URI = import.meta.env.VITE_REDIRECT_URI;

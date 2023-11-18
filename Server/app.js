@@ -46,7 +46,6 @@ app.post('/api/login', (req, res) => {
         return response.json();
     })
     .then(data => {
-        console.log("More Testing")
         return res.json(data);
         
     })
@@ -66,7 +65,7 @@ app.post("/playlist", (req, res) => {
             'Authorization': `Bearer ${accessToken}`,
         },
         body: JSON.stringify({
-            name: "Gym playlist",
+            name: "TempoTracks Playlist",
             public: 'false'
         })
     }
