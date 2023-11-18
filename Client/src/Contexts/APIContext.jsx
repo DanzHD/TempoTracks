@@ -1,4 +1,5 @@
 import { createContext, useContext } from "react";
+import { BACKEND_SERVER } from "../utils/Constants.jsx";
 
 export const APIContext = createContext(null);
 
@@ -37,7 +38,6 @@ const getTrackInfo = async (offset) => {
 
 }
 
-
 const FindSongs = async ({ BPM, trackInfo }) => {
 
     const accessToken = localStorage.getItem('accessToken');
@@ -65,7 +65,7 @@ const FindSongs = async ({ BPM, trackInfo }) => {
         },
         body: body
     }
-    return fetch(`https://tempotracks-65f5e5cc18fc.herokuapp.com/tracks/audio-features`, options)
+    return fetch(`${BACKEND_SERVER}/tracks/audio-features`, options)
         .then(res => res.json())
 
 
@@ -101,7 +101,7 @@ const createPlaylist = async ({ userID }) => {
             userID: userID
         })
     }
-    playlistID = await fetch('https://tempotracks-65f5e5cc18fc.herokuapp.com/playlist', options)
+    playlistID = await fetch(`${BACKEND_SERVER}/playlist`, options)
         .then(res => res.json())
         .then(data => data.id)
         .catch(err => console.log(err));
@@ -126,7 +126,7 @@ const addPlaylist = async ({ trackURIs, playlistID }) => {
         body: body
     }
 
-    fetch('https://tempotracks-65f5e5cc18fc.herokuapp.com/playlist/add', options)
+    fetch(`${BACKEND_SERVER}/playlist/add`, options)
     .catch(err => console.error(err));
 }
 
